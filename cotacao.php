@@ -7,21 +7,36 @@ use \App\Awesome\economia;
 //instancia da classe da api
 $obEconomia = new Economia;
 
-// if(!isset($argv[2])){
-//     die('necessario duas moedas');
-// }
+//moedas recebidas via post
+    if(!empty($_POST['moedaA']) && !empty($_POST['moedaB'])){
+        $moedaA = $_POST['moedaA'];
+        $moedaB = $_POST['moedaB'];
 
-//moedas
-$moedaA = "USD";
-$moedaB = "BRL";
+        //executa a requisição da api
+        $dadosCotacao = $obEconomia->consultarCotacao($moedaA,$moedaB);
 
-//executa a requisição da api
-$dadosCotacao = $obEconomia->consultarCotacao("USD","BRL");
+        //ajusta o response 
+        $dadosCotacao = $dadosCotacao[$moedaA.$moedaB] ?? [];
 
-//ajusta o response
-$dadosCotacao = $dadosCotacao["USDBRL"] ?? [];
+        //retorna a cotação  
+        echo 'moedas '.$moedaA.' -> '.$moedaB."<br>";
+        echo 'Compra '.($dadosCotacao['bid'] ?? 'desconhecido')."<br>";
+        echo 'venda '.($dadosCotacao['ask'] ?? 'desconhecido')."<br>";
+}
 
-//retorna a cotação 
-echo 'moedas '.$moedaA.' -> '.$moedaB."\n";
-echo 'Compra '.($dadosCotacao['bid'] ?? 'desconhecido')."\n";
-echo 'venda '.($dadosCotacao['ask'] ?? 'desconhecido')."\n";
+
+
+
+
+
+
+//     //executa a requisição da api descomentar <<<<<
+// $dadosCotacao = $obEconomia->consultarCotacao("USD","BRL");
+
+// //ajusta o response descomentar <<<<<
+// $dadosCotacao = $dadosCotacao["USDBRL"] ?? [];
+
+// //retorna a cotação  descomentar <<<<<
+// echo 'moedas '.$moedaA.' -> '.$moedaB."\n";
+// echo 'Compra '.($dadosCotacao['bid'] ?? 'desconhecido')."\n";
+// echo 'venda '.($dadosCotacao['ask'] ?? 'desconhecido')."\n";
